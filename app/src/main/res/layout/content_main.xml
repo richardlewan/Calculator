@@ -53,13 +53,13 @@
         android:layout_margin="@dimen/fab_margin"
         android:layout_marginStart="12dp"
         android:layout_marginBottom="145dp"
-        app:layout_constraintBottom_toTopOf="@+id/history"
+        app:layout_constraintBottom_toTopOf="@+id/historyView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/linearLayout"
         app:srcCompat="@drawable/ic_equals" />
 
-    <ListView
-        android:id="@+id/history"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/historyView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="1dp"

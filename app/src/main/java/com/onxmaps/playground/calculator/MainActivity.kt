@@ -19,18 +19,25 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import timber.log.Timber
 import kotlin.reflect.KFunction
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
 
-    enum class Operation(val resourceId: Int, val mathFunction: KFunction<Float>) {
-        ADD(R.drawable.ic_add, ::add),
-        SUBTRACT(R.drawable.ic_subtract, ::subtract),
-        MULTIPLY(R.drawable.ic_multiply, ::multiply),
-        DIVIDE(R.drawable.ic_divide, ::divide),
-        MOD(R.drawable.ic_mod, ::mod)
+    enum class Operation(val resourceId: Int, val mathFunction: KFunction<Float>, val operatorString: String) {
+        ADD(R.drawable.ic_add, ::add, "+"),
+        SUBTRACT(R.drawable.ic_subtract, ::subtract, "-"),
+        MULTIPLY(R.drawable.ic_multiply, ::multiply, "*"),
+        DIVIDE(R.drawable.ic_divide, ::divide, "/"),
+        MOD(R.drawable.ic_mod, ::mod, "%")
     }
 
     var selectedOperation = Operation.ADD
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+    private lateinit var viewManager: RecyclerView.LayoutManager
+    val historyList = ArrayList<String>()
 
     /**
      * Instructions: Create a calculator that can perform 5 operations:
@@ -41,7 +48,6 @@ class MainActivity : AppCompatActivity() {
      * find a way to clear your result and start over. If you have
      * extra time, keep and display a history of all operations done.
      */
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.plant(Timber.DebugTree())
@@ -49,16 +55,39 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         equalsButton.setOnClickListener {
-            val input1 = findViewById<EditText>(R.id.decimalInput1).text.toString().toFloat()
-            val input2 = findViewById<EditText>(R.id.decimalInput2).text.toString().toFloat()
-            val result = selectedOperation.mathFunction.call(Calculator, input1, input2).toString()
+            val textInput1 = findViewById<EditText>(R.id.decimalInput1).text
+            val textInput2 = findViewById<EditText>(R.id.decimalInput2).text
+            if (textInput1 != null && textInput2 != null && textInput1.isNotBlank() && textInput2.isNotBlank()) {
+                val input1 = textInput1.toString().toFloat()
+                val input2 = textInput2.toString().toFloat()
+                val result =
+                    selectedOperation.mathFunction.call(Calculator, input1, input2).toString()
+                val fullCalculation =
+                    "$input1 ${selectedOperation.operatorString} $input2 = $result"
 
-            Snackbar.make(
-                findViewById<CoordinatorLayout>(R.id.coordinatorLayout),
-                result,
-                Snackbar.LENGTH_LONG
-            ).show()
+                // Show the user result
+                Snackbar.make(
+                    findViewById<CoordinatorLayout>(R.id.coordinatorLayout),
+                    fullCalculation,
+                    Snackbar.LENGTH_LONG
+                ).show()
+
+                // Add to the history
+                val indexLastItemAfterAdding = historyList.size
+                historyList.add(fullCalculation)
+                viewAdapter.notifyItemChanged(indexLastItemAfterAdding)
+            }
         }
+
+        viewManager = LinearLayoutManager(this)
+        viewAdapter = HistoryAdapter(historyList)
+
+        recyclerView = findViewById<RecyclerView>(R.id.historyView).apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -68,11 +97,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // TODO: Handle action bar item clicks here. Change the
-        //  symbol of the operator to match the operation
-        //  that was selected. Pressing the "equals"
-        //  button should also perform that operation
-
         when (item.itemId) {
             R.id.add -> selectedOperation = Operation.ADD
             R.id.subtract -> selectedOperation = Operation.SUBTRACT
