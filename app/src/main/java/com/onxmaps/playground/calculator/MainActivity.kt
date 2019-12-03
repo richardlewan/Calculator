@@ -1,5 +1,6 @@
 package com.onxmaps.playground.calculator
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
@@ -21,6 +22,7 @@ import timber.log.Timber
 import kotlin.reflect.KFunction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.view.inputmethod.InputMethodManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         Timber.plant(Timber.DebugTree())
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        focusFirstInput()
 
         equalsButton.setOnClickListener {
             val textInput1 = findViewById<EditText>(R.id.decimalInput1).text
@@ -77,6 +80,7 @@ class MainActivity : AppCompatActivity() {
                 historyList.add(fullCalculation)
                 viewAdapter.notifyItemChanged(indexLastItemAfterAdding)
             }
+            hideSoftKeyboard()
         }
 
         viewManager = LinearLayoutManager(this)
@@ -109,8 +113,17 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun swapImageToSelectedOperation() {
+    private fun swapImageToSelectedOperation() {
         val imageView = findViewById<ImageView>(R.id.operatorImage)
         imageView.setImageResource(selectedOperation.resourceId)
+    }
+
+    private fun focusFirstInput() {
+        findViewById<EditText>(R.id.decimalInput1).requestFocus()
+    }
+
+    private fun hideSoftKeyboard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentFocus!!.getWindowToken(), 0)
     }
 }

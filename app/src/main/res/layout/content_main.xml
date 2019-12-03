@@ -24,7 +24,8 @@
             android:layout_height="47dp"
             android:ems="10"
             android:inputType="numberDecimal"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:selectAllOnFocus="true" />
 
         <ImageView
             android:id="@+id/operatorImage"
@@ -42,7 +43,8 @@
             android:layout_height="47dp"
             android:ems="10"
             android:inputType="numberDecimal"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:selectAllOnFocus="true" />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
