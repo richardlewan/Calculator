@@ -4,20 +4,30 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
 import android.widget.ImageView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.google.android.material.snackbar.Snackbar
+import com.onxmaps.playground.calculator.util.Calculator
+import com.onxmaps.playground.calculator.util.Calculator.add
+import com.onxmaps.playground.calculator.util.Calculator.divide
+import com.onxmaps.playground.calculator.util.Calculator.mod
+import com.onxmaps.playground.calculator.util.Calculator.multiply
+import com.onxmaps.playground.calculator.util.Calculator.subtract
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import timber.log.Timber
+import kotlin.reflect.KFunction
 
 class MainActivity : AppCompatActivity() {
 
-    enum class Operation(val resourceId: Int) {
-        ADD(R.drawable.ic_add),
-        SUBTRACT(R.drawable.ic_subtract),
-        MULTIPLY(R.drawable.ic_multiply),
-        DIVIDE(R.drawable.ic_divide),
-        MOD(R.drawable.ic_mod)
+    enum class Operation(val resourceId: Int, val mathFunction: KFunction<Float>) {
+        ADD(R.drawable.ic_add, ::add),
+        SUBTRACT(R.drawable.ic_subtract, ::subtract),
+        MULTIPLY(R.drawable.ic_multiply, ::multiply),
+        DIVIDE(R.drawable.ic_divide, ::divide),
+        MOD(R.drawable.ic_mod, ::mod)
     }
 
     var selectedOperation = Operation.ADD
@@ -38,14 +48,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        equalsButton.setOnClickListener { _ ->
-            // TODO perform the selected calculation type
+        equalsButton.setOnClickListener {
+            val input1 = findViewById<EditText>(R.id.decimalInput1).text.toString().toFloat()
+            val input2 = findViewById<EditText>(R.id.decimalInput2).text.toString().toFloat()
+            val result = selectedOperation.mathFunction.call(Calculator, input1, input2).toString()
+
+            Snackbar.make(
+                findViewById<CoordinatorLayout>(R.id.coordinatorLayout),
+                result,
+                Snackbar.LENGTH_LONG
+            ).show()
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
