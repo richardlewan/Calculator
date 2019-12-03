@@ -36,6 +36,10 @@ class MainActivity : AppCompatActivity() {
 
     var selectedOperation = Operation.ADD
 
+    // Make result accessible as test hook.
+    // TODO: better way to assert against result
+    var result = ""
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -63,7 +67,7 @@ class MainActivity : AppCompatActivity() {
             if (textInput1 != null && textInput2 != null && textInput1.isNotBlank() && textInput2.isNotBlank()) {
                 val input1 = textInput1.toString().toFloat()
                 val input2 = textInput2.toString().toFloat()
-                val result =
+                result =
                     selectedOperation.mathFunction.call(Calculator, input1, input2).toString()
                 val fullCalculation =
                     "$input1 ${selectedOperation.operatorString} $input2 = $result"
