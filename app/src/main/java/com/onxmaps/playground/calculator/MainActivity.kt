@@ -4,12 +4,23 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
+
+    enum class Operation(val resourceId: Int) {
+        ADD(R.drawable.ic_add),
+        SUBTRACT(R.drawable.ic_subtract),
+        MULTIPLY(R.drawable.ic_multiply),
+        DIVIDE(R.drawable.ic_divide),
+        MOD(R.drawable.ic_mod)
+    }
+
+    var selectedOperation = Operation.ADD
 
     /**
      * Instructions: Create a calculator that can perform 5 operations:
@@ -44,6 +55,21 @@ class MainActivity : AppCompatActivity() {
         //  symbol of the operator to match the operation
         //  that was selected. Pressing the "equals"
         //  button should also perform that operation
+
+        when (item.itemId) {
+            R.id.add -> selectedOperation = Operation.ADD
+            R.id.subtract -> selectedOperation = Operation.SUBTRACT
+            R.id.multiply -> selectedOperation = Operation.MULTIPLY
+            R.id.divide -> selectedOperation = Operation.DIVIDE
+            R.id.mod -> selectedOperation = Operation.MOD
+        }
+        swapImageToSelectedOperation()
+
         return super.onOptionsItemSelected(item)
+    }
+
+    fun swapImageToSelectedOperation() {
+        val imageView = findViewById<ImageView>(R.id.operatorImage)
+        imageView.setImageResource(selectedOperation.resourceId)
     }
 }
