@@ -5,6 +5,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * Taken from google RecyclerView example.
+ */
 class HistoryAdapter(private val myDataset: ArrayList<String>) :
     RecyclerView.Adapter<HistoryAdapter.MyViewHolder>() {
 
@@ -21,7 +24,6 @@ class HistoryAdapter(private val myDataset: ArrayList<String>) :
         // create a new view
         val textView = LayoutInflater.from(parent.context)
             .inflate(R.layout.history_text_view, parent, false) as TextView
-        // set the view's size, margins, paddings and layout parameters
 
         return MyViewHolder(textView)
     }
