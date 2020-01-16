@@ -5,9 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.EditText
-import android.widget.ImageView
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.Snackbar
 import com.onxmaps.playground.calculator.util.Calculator
 import com.onxmaps.playground.calculator.util.Calculator.add
@@ -23,6 +20,9 @@ import kotlin.reflect.KFunction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.inputmethod.InputMethodManager
+import androidx.databinding.DataBindingUtil
+import com.onxmaps.playground.calculator.databinding.ActivityMainBinding
+import kotlinx.android.synthetic.main.content_main.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     // TODO: better way to assert against result
     var result = ""
 
+    private lateinit var binding: ActivityMainBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -57,13 +58,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.plant(Timber.DebugTree())
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setSupportActionBar(toolbar)
         focusFirstInput()
 
         equalsButton.setOnClickListener {
-            val textInput1 = findViewById<EditText>(R.id.decimalInput1).text
-            val textInput2 = findViewById<EditText>(R.id.decimalInput2).text
+            val textInput1 = binding.contentMain.decimalInput1.text
+            val textInput2 = binding.contentMain.decimalInput2.text
             if (textInput1 != null && textInput2 != null && textInput1.isNotBlank() && textInput2.isNotBlank()) {
                 val input1 = textInput1.toString().toFloat()
                 val input2 = textInput2.toString().toFloat()
@@ -74,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
                 // Show the user result
                 Snackbar.make(
-                    findViewById<CoordinatorLayout>(R.id.coordinatorLayout),
+                    binding.coordinatorLayout,
                     fullCalculation,
                     Snackbar.LENGTH_LONG
                 ).show()
@@ -90,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         viewManager = LinearLayoutManager(this)
         viewAdapter = HistoryAdapter(historyList)
 
-        recyclerView = findViewById<RecyclerView>(R.id.historyView).apply {
+        recyclerView = binding.contentMain.historyView.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
@@ -118,12 +119,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun swapImageToSelectedOperation() {
-        val imageView = findViewById<ImageView>(R.id.operatorImage)
+        val imageView = binding.contentMain.operatorImage
         imageView.setImageResource(selectedOperation.resourceId)
     }
 
     private fun focusFirstInput() {
-        findViewById<EditText>(R.id.decimalInput1).requestFocus()
+        binding.contentMain.decimalInput1.requestFocus()
     }
 
     private fun hideSoftKeyboard() {
