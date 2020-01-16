@@ -2,9 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.onxmaps.playground.calculator.MainActivity">
-    <item android:id="@+id/add" android:title="Add"></item>
-    <item android:id="@+id/subtract" android:title="Subtract"></item>
-    <item android:id="@+id/multiply" android:title="Multiply"></item>
-    <item android:id="@+id/divide" android:title="Divide"></item>
-    <item android:id="@+id/mod" android:title="Find Remainder"></item>
+    <item android:id="@+id/add" android:title="@string/add_title"></item>
+    <item android:id="@+id/subtract" android:title="@string/subtract_title"></item>
+    <item android:id="@+id/multiply" android:title="@string/multiply_title"></item>
+    <item android:id="@+id/divide" android:title="@string/divide_title"></item>
+    <item android:id="@+id/mod" android:title="@string/mod_title"></item>
 </menu>

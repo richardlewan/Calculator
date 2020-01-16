@@ -73,7 +73,7 @@ class InstrumentedTest {
 
         // When
         openActionBarOverflowOrOptionsMenu(getInstrumentation().targetContext)
-        onView(withText("Multiply"))
+        onView(withText(R.string.multiply_title))
             .perform(click())
         enterInputsAndCalculate(input1, input2)
 

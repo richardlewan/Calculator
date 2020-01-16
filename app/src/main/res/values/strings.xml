@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Calculator</string>
+    <string name="add_title">Add</string>
+    <string name="subtract_title">Subtract</string>
+    <string name="multiply_title">Multiply</string>
+    <string name="divide_title">Divide</string>
+    <string name="mod_title">Remainder</string>
 </resources>
